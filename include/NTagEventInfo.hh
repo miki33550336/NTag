@@ -543,12 +543,14 @@ class NTagEventInfo
                                          Can be set to \c false from command line with option `-noMVA`. */
                     bSaveTQ,        /*!< Set \c true if saving the ToF-subtracted TQ vectors, otherwise \c false.
                                          Can be set to \c true from command line with option `-saveTQ`. */
-                    bForceFlat,       /*!< Set \c true if forcing MC mode, otherwise \c false.
+                    bForceFlat,     /*!< Set \c true if forcing MC mode, otherwise \c false.
                                          Can be set to \c true from command line with option `-forceFlat`. */
                     bUseResidual,   /*!< Set \c false if not using ToF-subtracted hit times, otherwise \c false.
                                          Can be set to \c false from command line with option `-noTOF`. */
-                    bUseNeutFit;    /*!< Set \c false if not using Neut-fit and MVA, otherwise \c false.
+                    bUseNeutFit,    /*!< Set \c false if not using Neut-fit and MVA, otherwise \c true.
                                          Can be set to \c false from command line with option `-noFit`. */
+                    bProcessEvent;  /*!< Set \c false if some problem happens in NTagIO::SetEventInfo, otherwise \c true.
+                                         NTagIO::SearchAndFill works only when #bProcessEvent is \c true. */
         bool candidateVariablesInitialized; /*!< A flag to check if #iCandidateVarMap and #fCandidateVarMap
                                                  are initialized. */
 

@@ -114,7 +114,7 @@ void NTagIO::ReadFile()
 
             case 2: // end of input
                 // If the last event was SHE without AFT, fill output.
-                    if (!IsRawHitVectorEmpty()) {
+                if (!IsRawHitVectorEmpty()) {
                     msg.Print("Saving SHE without AFT...", pDEBUG);
                     SearchAndFill();
                 }
@@ -157,6 +157,15 @@ void NTagIO::SetEventInfo()
 
 void NTagIO::SearchAndFill()
 {
+    if(!bProcessEvent){
+        // Some problem happens in processing prompt peak
+        std::cout<<"\n"<<std::endl;
+        msg.Print(Form("Skip event #%d", nProcessedEvents), pWARNING, true);
+        Clear();
+        return;
+    }
+
+
     SetToFSubtractedTQ();
 
     // Tagging starts here!

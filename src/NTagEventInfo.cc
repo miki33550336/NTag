@@ -134,8 +134,11 @@ void NTagEventInfo::SetPromptVertex()
 
             stmfit_(initPoint, momDir, goodness, entryQ);
             
-            if (goodness < 0)
-                msg.Print("STMUFIT error occurred.", pWARNING);
+            if (goodness < 0){
+                msg.Print("STMFIT error occurred.", pWARNING);
+                bProcessEvent = false;
+                break;
+            }
 
             // 1-ring muon
             apcommul_.apnring = 1; apcommul_.apip[iRing] = 13;
@@ -825,6 +828,8 @@ void NTagEventInfo::Clear()
     neutIntMom = 0;
     nVec = 0;
     vecx = 0; vecy = 0; vecz = 0;
+    
+    bProcessEvent = true;
 
     vTISKZ.clear(); vQISKZ.clear(); vCABIZ.clear(); vISIGZ.clear(); vPMTHitTime.fill(0);
 
