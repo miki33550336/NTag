@@ -210,6 +210,7 @@ void NTagCandidate::SetVariablesForMode(ExtractionMode tWindow)
         iVarMap["N1300"] = tiskz.size();
         int isData = 0; if (currentEvent->bData) isData = 1;
 
+        msg.Print(Form("bonsai fit to candidate #%d at %lf ns", candidateID, fVarMap["ReconCT"]), pDEBUG, true);
         bonsai_fit_(&isData, &fVarMap["ReconCT"], tiskz.data(), qiskz.data(), cabiz.data(), &iVarMap["N1300"],
                     &fVarMap["BSenergy"], &fVarMap["bsvx"], &fVarMap["bsvy"], &fVarMap["bsvz"],
                     &fVarMap["BSReconCT"], &fVarMap["BSgood"], &fVarMap["BSdirks"], &fVarMap["BSpatlik"], &fVarMap["BSovaq"]);
