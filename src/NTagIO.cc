@@ -169,7 +169,9 @@ void NTagIO::SearchAndFill()
     SetToFSubtractedTQ();
 
     // Tagging starts here!
-    SearchCaptureCandidates();
+    CheckLargeSubEvent();
+    if(trgType >= 0)
+        SearchCaptureCandidates();
     SetCandidateVariables();
 
     // DONT'T FORGET TO FILL!

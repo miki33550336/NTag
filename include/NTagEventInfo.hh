@@ -233,6 +233,14 @@ class NTagEventInfo
         ///////////////////////////////////////////////
 
         /**
+         * @brief Checks if there is a large sub-event whose N200 exceeds #N200MX (default: 200).
+         * Such a sub-event is supposed to be caused by cosmic muons or calibration lasers.
+         * Capture candidates are searched for only in events without large sub-event.
+         * #trgType is set to -1.
+         */
+        void CheckLargeSubEvent();
+
+        /**
          * @brief The main search function for candidate selection before applying neural network.
          * @details NTagEventInfo::SavePeakFromHit is called to save peaks that match
          * the primary selection conditions as neutron capture candidates.
@@ -571,7 +579,7 @@ class NTagEventInfo
                eventNo,   ///< Event # of an event.
                nhitac,    ///< Number of OD hits within 1.3 us around the main trigger of an event.
                nqiskz,    ///< Number of all hits recorded in #vTISKZ.
-               trgType;   ///< Trigger type. MC: 0, SHE: 1, SHE+AFT: 2, Non-SHE: 3
+               trgType;   ///< Trigger type. MC: 0, SHE: 1, SHE+AFT: 2, Non-SHE: 3, Has large sub-event: -1
         float  trgOffset, ///< Trigger offset of an event. Default set to 1,000 [ns].
                tDiff,     ///< Time difference from the current event to the previous event. [ms]
                qismsk;    /*!< Total p.e. deposited in ID within 1.3 us around

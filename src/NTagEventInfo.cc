@@ -378,10 +378,11 @@ void NTagEventInfo::DumpEventVariables()
     msg.Print("\033[4mTrgType     TrgTime (ns)   TDiff (ms)   \033[0m");
     msg.Print("", pDEFAULT, false);
     std::cout << std::left << std::setw(12);
-    if      (trgType == 1) std::cout << "SHE-only";
+    if      (trgType == 0) std::cout << "MC";
+    else if (trgType == 1) std::cout << "SHE-only";
     else if (trgType == 2) std::cout << "SHE+AFT";
     else if (trgType == 3) std::cout << "Non-SHE";
-    else                   std::cout << "MC";
+    else                   std::cout << "Skip search";
     std::cout << std::left << std::setw(15) << trgOffset;
     std::cout << std::left << std::setw(13) << tDiff;
     std::cout << std::endl;
@@ -621,6 +622,27 @@ void NTagEventInfo::ReadSecondaries()
     apflscndprt_();
 }
 
+void NTagEventInfo::CheckLargeSubEvent()
+{
+    // Loop over the saved TQ hit array and check N200
+    for (int iHit = 0; iHit < nqiskz; iHit++) {
+
+        // the Hit timing w/o TOF is larger than limit, or less smaller than t0
+        if (vSortedT_ToF[iHit]*1.e-3 < T0TH || vSortedT_ToF[iHit]*1.e-3 > T0MX) continue;
+
+        // Calculate N200 and compare with N200MX
+        float t0 = vSortedT_ToF[iHit];
+        int N200 = GetNhitsFromCenterTime(vSortedT_ToF, t0 , 200.);
+        if (N200 > N200MX) {
+            trgType = -1;
+            msg.Print(Form("N200 exceeds N200MX : N200 = %d at t0 = %lf ns",N200, t0), pWARNING);
+            msg.Print(Form("Candidate search is skipped in event #%d.", nProcessedEvents), pWARNING);
+            break;
+        }
+        
+    }
+}
+
 void NTagEventInfo::SearchCaptureCandidates()
 {
     int   iHitPrevious    = 0;
@@ -650,7 +672,7 @@ void NTagEventInfo::SearchCaptureCandidates()
         float t0New = vSortedT_ToF[iHit];
 
         // Save maximum N200 and its t0
-        float N200New = GetNhitsFromCenterTime(vSortedT_ToF, t0New + TWIDTH/2, 200.);
+        int N200New = GetNhitsFromCenterTime(vSortedT_ToF, t0New + TWIDTH/2, 200.);
         if (t0New*1.e-3 > T0TH && N200New > maxN200) {
             maxN200 = N200New;
             maxN200Time = t0New;
